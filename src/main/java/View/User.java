@@ -1,3 +1,5 @@
+package View;
+
 import javax.swing.*;
 
 public class User extends JPanel {
