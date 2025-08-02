@@ -8,48 +8,95 @@ public class ManagerReport extends JPanel {
   public ManagerReport() {
     setLayout(new BorderLayout());
     add(createTopPanel(), BorderLayout.NORTH);
-    add(createBottomPanel(), BorderLayout.CENTER);
+    add(createTablePanel(), BorderLayout.CENTER);
   }
 
   private JPanel createTopPanel() {
     JPanel topPanel = new JPanel(new BorderLayout());
 
-    // Panel chứa 4 label trên
-    JPanel labelPanel = new JPanel(new GridLayout(1, 4, 10, 10));
-    labelPanel.setPreferredSize(new Dimension(1542, 40));
+    // Panel chứa 2 label và input hàng đầu
+    JPanel firstRowPanel = new JPanel();
+    firstRowPanel.setPreferredSize(new Dimension(1542, 50));
+    firstRowPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
+    firstRowPanel.setLayout(new BoxLayout(firstRowPanel, BoxLayout.X_AXIS));
 
-    JLabel label1 = new JLabel("a", SwingConstants.CENTER);
-    JLabel label2 = new JLabel("b", SwingConstants.CENTER);
-    JLabel label3 = new JLabel("c", SwingConstants.CENTER);
-    JLabel label4 = new JLabel("d", SwingConstants.CENTER);
+    JPanel leftFirstPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+    JPanel rightFirstPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+    rightFirstPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 30));
 
-    formatLabel(label1);
-    formatLabel(label2);
-    formatLabel(label3);
-    formatLabel(label4);
+    JLabel fromDateLabel = new JLabel("From Date");
+    JDateChooser dateFrom = new JDateChooser();
+    JLabel toDateLabel = new JLabel("To Date");
+    JDateChooser dateTo = new JDateChooser();
+    JButton btnExport = new JButton("Export Excel");
 
-    labelPanel.add(label1);
-    labelPanel.add(label2);
-    labelPanel.add(label3);
-    labelPanel.add(label4);
+    formatLabel(fromDateLabel);
+    formatLabel(toDateLabel);
+    dateFrom.setPreferredSize(new Dimension(170, 25));
+    dateTo.setPreferredSize(new Dimension(170, 25));
+    btnExport.setPreferredSize(new Dimension(150, 40));
 
-    // Panel chứa 4 textfield dưới
-    JPanel textFieldPanel = new JPanel(new GridLayout(1, 4, 10, 10));
-    textFieldPanel.setPreferredSize(new Dimension(1542, 40));
+    leftFirstPanel.add(fromDateLabel);
+    leftFirstPanel.add(dateFrom);
+    leftFirstPanel.add(Box.createHorizontalStrut(20));
+    leftFirstPanel.add(toDateLabel);
+    leftFirstPanel.add(dateTo);
 
-    JTextField textField1 = new JTextField();
-    JTextField textField2 = new JTextField();
-    JTextField textField3 = new JTextField();
-    JTextField textField4 = new JTextField();
+    rightFirstPanel.add(btnExport);
 
-    textFieldPanel.add(textField1);
-    textFieldPanel.add(textField2);
-    textFieldPanel.add(textField3);
-    textFieldPanel.add(textField4);
+    firstRowPanel.add(leftFirstPanel);
+    firstRowPanel.add(Box.createHorizontalGlue());
+    firstRowPanel.add(rightFirstPanel);
 
-    // Gộp label + textfield vào topPanel
-    topPanel.add(labelPanel, BorderLayout.NORTH);
-    topPanel.add(textFieldPanel, BorderLayout.SOUTH);
+    // Panel chứa 2 label và input hàng thứ hai
+    JPanel secondRowPanel = new JPanel();
+    secondRowPanel.setPreferredSize(new Dimension(1542, 50));
+    secondRowPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
+    secondRowPanel.setLayout(new BoxLayout(secondRowPanel, BoxLayout.X_AXIS));
+
+    JPanel leftSecondPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+    JPanel rightSecondPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+    rightSecondPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 30));
+
+    JLabel codeLopLabel = new JLabel("Code Lốp");
+    JTextField codeLopField = new JTextField();
+    JLabel quyCachLabel = new JLabel("Quy Cách");
+    JTextField quyCachField = new JTextField();
+    JLabel maGaiLabel = new JLabel("Mã Gai");
+    JTextField maGaiField = new JTextField();
+    JTextField maField = new JTextField(10);
+    JButton btnSearch = new JButton("Search");
+
+    formatLabel(codeLopLabel);
+    formatLabel(quyCachLabel);
+    formatLabel(maGaiLabel);
+    codeLopField.setPreferredSize(new Dimension(170, 25));
+    quyCachField.setPreferredSize(new Dimension(170, 25));
+    maGaiField.setPreferredSize(new Dimension(170, 25));
+    maField.setPreferredSize(new Dimension(250, 30));
+    btnSearch.setPreferredSize(new Dimension(150, 30));
+
+    leftSecondPanel.add(codeLopLabel);
+    leftSecondPanel.add(codeLopField);
+    leftSecondPanel.add(Box.createHorizontalStrut(20));
+    leftSecondPanel.add(quyCachLabel);
+    leftSecondPanel.add(quyCachField);
+    leftSecondPanel.add(maGaiLabel);
+    leftSecondPanel.add(maGaiField);
+
+    rightSecondPanel.add(maField);
+    rightSecondPanel.add(btnSearch);
+
+    secondRowPanel.add(leftSecondPanel);
+    secondRowPanel.add(Box.createHorizontalGlue());
+    secondRowPanel.add(rightSecondPanel);
+
+    // Gộp hai hàng vào topPanel
+    JPanel combinedPanel = new JPanel(new GridLayout(2, 1, 0, 10));
+    combinedPanel.add(firstRowPanel);
+    combinedPanel.add(secondRowPanel);
+
+    topPanel.add(combinedPanel, BorderLayout.CENTER);
 
     return topPanel;
   }
@@ -60,43 +107,20 @@ public class ManagerReport extends JPanel {
     label.setFont(new Font("Arial", Font.BOLD, 16));
   }
 
-  private JPanel createBottomPanel() {
+  private JPanel createTablePanel() {
     JPanel bottomPanel = new JPanel(new BorderLayout());
     bottomPanel.setPreferredSize(new Dimension(1542, 350));
+    bottomPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 
-    // Panel chứa JCalendar và nút Search
-    JDateChooser dateFrom = new JDateChooser();
-    JDateChooser dateTo = new JDateChooser();
-    // Chỉnh kích thước JDateChooser
-    dateFrom.setPreferredSize(new Dimension(170, 25));
-    dateTo.setPreferredSize(new Dimension(170, 25));
-    JButton btnSearch = new JButton("Search");
-    JButton btnExport = new JButton("Export Excel");
-
-    JPanel contentPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
-    contentPanel.setBackground(Color.GRAY);
-
-    contentPanel.add(new JLabel("Từ ngày:"));
-    contentPanel.add(dateFrom);
-    contentPanel.add(new JLabel("Đến ngày:"));
-    contentPanel.add(dateTo);
-    contentPanel.add(btnSearch);
-    contentPanel.add(Box.createHorizontalStrut(850));
-    contentPanel.add(btnExport);
-
-    // Tạo bảng chính giữa
-    String[] columnNames = {"Cột 1", "Cột 2", "Cột 3", "Cột 4"};
+    String[] columnNames = {"STT", "Code Lốp", "Quy Cách", "PR", "Mã Gai", "TT/TL", "Chỉ Số Tải", "Tốc Độ", "Thương Hiệu", "Vành", "BarCode", "Khối Lượng Cân(kg)", "Kết Quả", "TCTK(kg)", "Min(kg)", "Max(kg)", "Thời Gian Cân", "Ngày LH"};
     Object[][] data = {
-        {"A1", "B1", "C1", "D1"},
-        {"A2", "B2", "C2", "D2"},
-        {"A3", "B3", "C3", "D3"},
-        {"A4", "B4", "C4", "D4"}
+            {"1", "PR", "18", "BS81", "152/48", "TT", "100", "A", "Brand1", "R15", "123456", "50", "OK", "45", "40", "60", "12:55", "02/08/2025"},
+            {"2", "PR", "18", "BS81", "152/48", "TL", "100", "A", "Brand1", "R15", "123457", "50", "OK", "45", "40", "60", "12:55", "02/08/2025"},
+            {"3", "PR", "18", "BS81", "152/48", "TT", "100", "A", "Brand1", "R15", "123458", "50", "OK", "45", "40", "60", "12:55", "02/08/2025"}
     };
     JTable table = new JTable(data, columnNames);
     JScrollPane scrollPane = new JScrollPane(table);
 
-    // Thêm vào bottomPanel
-    bottomPanel.add(contentPanel, BorderLayout.NORTH);
     bottomPanel.add(scrollPane, BorderLayout.CENTER);
 
     return bottomPanel;

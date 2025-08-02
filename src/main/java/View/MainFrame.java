@@ -20,13 +20,17 @@ public class MainFrame extends JFrame {
 
     JMenuItem menuManagerCode = new JMenuItem("Manager Code");
     JMenuItem menuManagerReport = new JMenuItem("Manager Report");
-    JMenuItem menuUser = new JMenuItem("View.User");
+    JMenuItem menuUser = new JMenuItem("User");
+    JMenuItem menuInformation = new JMenuItem("Information");
     JMenuItem menuBackupData = new JMenuItem("Backup Data");
+    JMenuItem menuExit = new JMenuItem("Exit");
 
     menuBar.add(menuManagerCode);
     menuBar.add(menuManagerReport);
     menuBar.add(menuUser);
     menuBar.add(menuBackupData);
+    menuBar.add(menuInformation);
+    menuBar.add(menuExit);
     setJMenuBar(menuBar);
 
     // Khởi tạo panel chứa nội dung với CardLayout
