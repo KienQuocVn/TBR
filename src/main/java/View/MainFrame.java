@@ -18,12 +18,13 @@ public class MainFrame extends JFrame {
     JMenuBar menuBar = new JMenuBar();
     menuBar.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-    JMenuItem menuManagerCode = new JMenuItem("Manager Code");
-    JMenuItem menuManagerReport = new JMenuItem("Manager Report");
-    JMenuItem menuUser = new JMenuItem("User");
-    JMenuItem menuInformation = new JMenuItem("Information");
-    JMenuItem menuBackupData = new JMenuItem("Backup Data");
-    JMenuItem menuExit = new JMenuItem("Exit");
+    JMenuItem menuManagerCode = new JMenuItem("Manager Code", loadIcon("images/code.png", 20, 20));
+    JMenuItem menuManagerReport = new JMenuItem("Manager Report", loadIcon("images/report.png", 20, 20));
+    JMenuItem menuUser = new JMenuItem("User", loadIcon("images/user.png", 20, 20));
+    JMenuItem menuInformation = new JMenuItem("Information", loadIcon("images/info.png", 20, 20));
+    JMenuItem menuBackupData = new JMenuItem("Backup Data", loadIcon("images/backup.png", 20, 20));
+    JMenuItem menuExit = new JMenuItem("Exit", loadIcon("images/exit.png", 20, 20));
+
 
     menuBar.add(menuManagerCode);
     menuBar.add(menuManagerReport);
@@ -53,6 +54,17 @@ public class MainFrame extends JFrame {
 
     setVisible(true);
   }
+  private ImageIcon loadIcon(String path, int width, int height) {
+    java.net.URL location = getClass().getClassLoader().getResource(path);
+    if (location == null) {
+      System.err.println("Không tìm thấy ảnh: " + path);
+      return new ImageIcon();
+    }
+    ImageIcon icon = new ImageIcon(location);
+    Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+    return new ImageIcon(img);
+  }
+
 
   public static void main(String[] args) {
     SwingUtilities.invokeLater(MainFrame::new);

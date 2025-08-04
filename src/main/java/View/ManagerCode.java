@@ -4,6 +4,7 @@ import com.toedter.calendar.JDateChooser;
 
 import javax.swing.*;
 import java.awt.*;
+import com.toedter.calendar.JDateChooser;
 
 public class ManagerCode extends JPanel {
 
@@ -121,7 +122,7 @@ public class ManagerCode extends JPanel {
             BorderFactory.createLineBorder(Color.GRAY, 3)
     ));
 
-    // Panel trung tâm chứa label, input và button
+    // Panel trung tâm
     JPanel centerPanel = new JPanel();
     centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
     centerPanel.setOpaque(false);
@@ -134,21 +135,47 @@ public class ManagerCode extends JPanel {
     // Input Barcode
     JTextField txtBarcode = new JTextField();
     txtBarcode.setFont(new Font("Arial", Font.PLAIN, 18));
-    txtBarcode.setMaximumSize(new Dimension(200, 30));
+    txtBarcode.setMaximumSize(new Dimension(300, 30));
     txtBarcode.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+    // Panel chứa 2 ô vuông nhỏ: Điểm đầu & Điểm cuối (canh trái - phải)
+    JPanel subInputPanel = new JPanel();
+    subInputPanel.setLayout(new BoxLayout(subInputPanel, BoxLayout.X_AXIS));
+    subInputPanel.setOpaque(false);
+
+    // Ô vuông
+    JTextField txtStartPoint = new JTextField(2);
+    JTextField txtEndPoint = new JTextField(2);
+
+    Dimension squareSize = new Dimension(30, 30);
+    txtStartPoint.setMaximumSize(squareSize);
+    txtEndPoint.setMaximumSize(squareSize);
+
+    txtStartPoint.setHorizontalAlignment(JTextField.CENTER);
+    txtEndPoint.setHorizontalAlignment(JTextField.CENTER);
+
+    // Canh đều hai bên dưới txtBarcode
+    subInputPanel.add(Box.createHorizontalStrut(5));      // lề trái nhẹ
+    subInputPanel.add(txtStartPoint);
+    subInputPanel.add(Box.createHorizontalGlue());        // đẩy cách nhau
+    subInputPanel.add(txtEndPoint);
+    subInputPanel.add(Box.createHorizontalStrut(5));      // lề phải nhẹ
+
 
     // Button Save
     JButton btnSave = new JButton("Save");
     btnSave.setFont(new Font("Arial", Font.BOLD, 16));
-    btnSave.setBackground(new Color(0, 153, 102)); // xanh lá đậm
+    btnSave.setBackground(new Color(0, 153, 102));
     btnSave.setForeground(Color.YELLOW);
     btnSave.setFocusPainted(false);
     btnSave.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-    // Add vào centerPanel
+    // Add components
     centerPanel.add(lblBarcode);
     centerPanel.add(Box.createVerticalStrut(5));
     centerPanel.add(txtBarcode);
+    centerPanel.add(Box.createVerticalStrut(5));
+    centerPanel.add(subInputPanel);
     centerPanel.add(Box.createVerticalStrut(5));
     centerPanel.add(btnSave);
 
@@ -161,10 +188,8 @@ public class ManagerCode extends JPanel {
     JLabel lblStatus = new JLabel("NG", SwingConstants.CENTER);
     lblStatus.setFont(new Font("Arial", Font.BOLD, 48));
     lblStatus.setForeground(Color.RED);
-
     statusPanel.add(lblStatus, BorderLayout.CENTER);
 
-    // Add vào rightTop
     rightTop.add(centerPanel, BorderLayout.CENTER);
     rightTop.add(statusPanel, BorderLayout.EAST);
 
@@ -172,41 +197,25 @@ public class ManagerCode extends JPanel {
   }
 
 
+
   private JPanel createInfoPanel() {
     JPanel infoPanel = new JPanel(new BorderLayout());
     infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
+
     JPanel leftInfo = createLabelInputPanelLeft();
+    JPanel rightInfo = createLabelInputPanelRight();
 
-    JPanel rightInfoWrapper = new JPanel(new BorderLayout());
-    rightInfoWrapper.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 0));
-    rightInfoWrapper.add(createLabelInputPanelRight(), BorderLayout.CENTER);
-
-    JPanel barcodePanel = new JPanel(new GridLayout(2, 1, 5, 5));
-
-    JPanel barcodeRow = new JPanel(new GridLayout(2, 1, 5, 5));
-    JLabel lblBarcode = new JLabel("Bar Code", SwingConstants.CENTER);
-    lblBarcode.setFont(new Font("Arial", Font.BOLD, 20));
-
-    JTextField txtBarcode1 = new JTextField(20);
-    txtBarcode1.setFont(new Font("Arial", Font.PLAIN, 18));
-
-    barcodeRow.add(lblBarcode);
-    barcodeRow.add(txtBarcode1);
-
-    // Hàng 2: JTextField thứ 2
-    JTextField txtBarcode2 = new JTextField(20);
-    txtBarcode2.setFont(new Font("Arial", Font.PLAIN, 18));
-
-    // Thêm vào barcodePanel
-    barcodePanel.add(barcodeRow);
-    barcodePanel.add(txtBarcode2);
+    // Đặt kích thước bằng nhau cho cả hai panel
+    Dimension fixedSize = new Dimension(700, leftInfo.getPreferredSize().height);
+    leftInfo.setPreferredSize(fixedSize);
+    rightInfo.setPreferredSize(fixedSize);
 
     infoPanel.add(leftInfo, BorderLayout.WEST);
-    infoPanel.add(rightInfoWrapper, BorderLayout.CENTER);
-    infoPanel.add(barcodePanel, BorderLayout.EAST);
+    infoPanel.add(rightInfo, BorderLayout.CENTER);
 
     return infoPanel;
   }
+
 
   private JPanel createLabelInputPanelLeft() {
     return createLabelInputPanel(new String[]{
@@ -219,7 +228,7 @@ public class ManagerCode extends JPanel {
     return createLabelInputPanel(new String[]{
             "Chỉ Số Tải", "Tốc Độ", "Vành",
             "Thương Hiệu", "TT/TL", "KL Chuẩn"
-    }, 20);
+    }, 30);
   }
 
   private JPanel createLabelInputPanel(String[] labels, int textFieldSize) {
@@ -253,17 +262,28 @@ public class ManagerCode extends JPanel {
     JPanel bottomPanel = new JPanel(new BorderLayout());
     bottomPanel.setPreferredSize(new Dimension(1542, 350));
 
-    // Panel chứa txtInput, btnOk, btnPrint
-    JTextField txtInput = new JTextField(20);
-    JButton btnOk = new JButton("OKE");
-    JButton btnPrint = new JButton("In Phiếu");
-
-    JPanel contentPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
+    JPanel contentPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
     contentPanel.setBackground(Color.GRAY);
-    contentPanel.add(txtInput);
-    contentPanel.add(btnOk);
-    contentPanel.add(Box.createHorizontalStrut(1150));
-    contentPanel.add(btnPrint);
+
+// Khai báo JDateChooser
+    JDateChooser fromDate = new JDateChooser();
+    fromDate.setPreferredSize(new Dimension(120, 25));
+    JDateChooser toDate = new JDateChooser();
+    toDate.setPreferredSize(new Dimension(120, 25));
+
+// Label cho ngày
+    contentPanel.add(new JLabel("Từ ngày:"));
+    contentPanel.add(fromDate);
+    contentPanel.add(new JLabel("Đến ngày:"));
+    contentPanel.add(toDate);
+
+// ComboBox "Mã mới"
+    contentPanel.add(new JLabel("Mã mới:"));
+    String[] maMoiOptions = {"-- Chọn mã --", "CL01", "CL02", "CL03"};
+    JComboBox<String> comboMaMoi = new JComboBox<>(maMoiOptions);
+    comboMaMoi.setPreferredSize(new Dimension(150, 25));
+    contentPanel.add(comboMaMoi);
+
 
     // ======= BẢNG 1 (bên trái) =======
     String[] leftColumnNames = {
@@ -286,7 +306,7 @@ public class ManagerCode extends JPanel {
             {"CL02", "130/70-17", "8", "MG02", "TL", "60", "V", "Michelin", "17", "13.0", "14.0", "12.0", "01/08/2025"}
     };
     JTable tableRight = new JTable(rightData, rightColumnNames);
-    tableRight.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Không resize để thấy full text
+    tableRight.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
     JScrollPane scrollRight = new JScrollPane(tableRight);
     scrollRight.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
