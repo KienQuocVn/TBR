@@ -1,6 +1,7 @@
 package View;
 
 import com.toedter.calendar.JDateChooser;
+import javax.swing.border.Border;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +19,7 @@ public class ManagerCode extends JPanel {
   // Tạo panel phía trên (Hiển thị số, input, nút bấm)
   private JPanel createTopPanel() {
     JPanel topPanel = new JPanel(new BorderLayout());
-    topPanel.setPreferredSize(new Dimension(1542, 150));
+    topPanel.setPreferredSize(new Dimension(1542, 200));
 
     topPanel.add(createLeftTopPanel(), BorderLayout.WEST);
     topPanel.add(createMiddleTopPanel(), BorderLayout.CENTER);
@@ -80,9 +81,9 @@ public class ManagerCode extends JPanel {
   // Tạo panel ở giữa (Hiển thị số và chế độ)
   private JPanel createMiddleTopPanel() {
     JPanel middleTop = new JPanel();
-    middleTop.setPreferredSize(new Dimension(500, 100));
+    middleTop.setPreferredSize(new Dimension(500, 200));
     middleTop.setLayout(new BoxLayout(middleTop, BoxLayout.Y_AXIS));
-    middleTop.setBackground(Color.WHITE); // Tuỳ chọn, để dễ nhìn đường viền
+    middleTop.setBackground(Color.WHITE);
 
     // Label chế độ
     JLabel lblMode = new JLabel("Chế độ: AUTO", SwingConstants.CENTER);
@@ -95,12 +96,12 @@ public class ManagerCode extends JPanel {
 
     // Label giá trị
     JLabel lblMiddleValue = new JLabel("0.0", SwingConstants.CENTER);
-    lblMiddleValue.setFont(new Font("Arial", Font.BOLD, 48));
+    lblMiddleValue.setFont(new Font("Arial", Font.BOLD, 120));
     lblMiddleValue.setForeground(Color.RED);
     lblMiddleValue.setAlignmentX(Component.CENTER_ALIGNMENT);
     lblMiddleValue.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(Color.BLACK, 1),
-            BorderFactory.createEmptyBorder(17, 378, 17, 378)
+            BorderFactory.createEmptyBorder(0, 328, 0, 328)
     ));
 
     // Add vào panel
@@ -118,14 +119,18 @@ public class ManagerCode extends JPanel {
     JPanel rightTop = new JPanel(new BorderLayout());
     rightTop.setPreferredSize(new Dimension(500, 100));
     rightTop.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createEmptyBorder(10, 20, 10, 0),
+            BorderFactory.createEmptyBorder(30, 20, 30, 0),
             BorderFactory.createLineBorder(Color.GRAY, 3)
     ));
 
     // Panel trung tâm
-    JPanel centerPanel = new JPanel();
-    centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+    JPanel centerPanel = new JPanel(new BorderLayout());
     centerPanel.setOpaque(false);
+
+    // Panel chứa các thành phần trên cùng
+    JPanel topContentPanel = new JPanel();
+    topContentPanel.setLayout(new BoxLayout(topContentPanel, BoxLayout.Y_AXIS));
+    topContentPanel.setOpaque(false);
 
     // Label "Mã Barcode"
     JLabel lblBarcode = new JLabel("Mã Barcode", SwingConstants.CENTER);
@@ -138,7 +143,6 @@ public class ManagerCode extends JPanel {
     txtBarcode.setMaximumSize(new Dimension(300, 30));
     txtBarcode.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-    // Panel chứa 2 ô vuông nhỏ: Điểm đầu & Điểm cuối (canh trái - phải)
     JPanel subInputPanel = new JPanel();
     subInputPanel.setLayout(new BoxLayout(subInputPanel, BoxLayout.X_AXIS));
     subInputPanel.setOpaque(false);
@@ -155,12 +159,18 @@ public class ManagerCode extends JPanel {
     txtEndPoint.setHorizontalAlignment(JTextField.CENTER);
 
     // Canh đều hai bên dưới txtBarcode
-    subInputPanel.add(Box.createHorizontalStrut(5));      // lề trái nhẹ
+    subInputPanel.add(Box.createHorizontalStrut(5));
     subInputPanel.add(txtStartPoint);
-    subInputPanel.add(Box.createHorizontalGlue());        // đẩy cách nhau
+    subInputPanel.add(Box.createHorizontalGlue());
     subInputPanel.add(txtEndPoint);
-    subInputPanel.add(Box.createHorizontalStrut(5));      // lề phải nhẹ
+    subInputPanel.add(Box.createHorizontalStrut(5));
 
+    // Add components to topContentPanel with reduced struts
+    topContentPanel.add(lblBarcode);
+    topContentPanel.add(Box.createVerticalStrut(2));
+    topContentPanel.add(txtBarcode);
+    topContentPanel.add(Box.createVerticalStrut(2));
+    topContentPanel.add(subInputPanel);
 
     // Button Save
     JButton btnSave = new JButton("Save");
@@ -170,14 +180,9 @@ public class ManagerCode extends JPanel {
     btnSave.setFocusPainted(false);
     btnSave.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-    // Add components
-    centerPanel.add(lblBarcode);
-    centerPanel.add(Box.createVerticalStrut(5));
-    centerPanel.add(txtBarcode);
-    centerPanel.add(Box.createVerticalStrut(5));
-    centerPanel.add(subInputPanel);
-    centerPanel.add(Box.createVerticalStrut(5));
-    centerPanel.add(btnSave);
+    // Add top content and button to centerPanel
+    centerPanel.add(topContentPanel, BorderLayout.CENTER);
+    centerPanel.add(btnSave, BorderLayout.PAGE_END);
 
     // Panel "NG" bên phải
     JPanel statusPanel = new JPanel(new BorderLayout());
@@ -199,36 +204,84 @@ public class ManagerCode extends JPanel {
 
 
   private JPanel createInfoPanel() {
-    JPanel infoPanel = new JPanel(new BorderLayout());
+    JPanel infoPanel = new JPanel(new GridLayout(1, 4, 10, 0));
     infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
 
-    JPanel leftInfo = createLabelInputPanelLeft();
-    JPanel rightInfo = createLabelInputPanelRight();
+    JPanel column1 = createLabelInputPanelColumn1();
+    JPanel column2 = createLabelInputPanelColumn2();
+    JPanel column3 = createLabelInputPanelColumn3();
+    JPanel column4 = createLabelInputPanelColumn4();
 
-    // Đặt kích thước bằng nhau cho cả hai panel
-    Dimension fixedSize = new Dimension(700, leftInfo.getPreferredSize().height);
-    leftInfo.setPreferredSize(fixedSize);
-    rightInfo.setPreferredSize(fixedSize);
+    // Add rounded border to each column
+    column1.setBorder(new RoundedBorder(10, Color.GRAY));
+    column2.setBorder(new RoundedBorder(10, Color.GRAY));
+    column3.setBorder(new RoundedBorder(10, Color.GRAY));
+    column4.setBorder(new RoundedBorder(10, Color.GRAY));
 
-    infoPanel.add(leftInfo, BorderLayout.WEST);
-    infoPanel.add(rightInfo, BorderLayout.CENTER);
+    // Set same size for all panels
+    Dimension fixedSize = new Dimension(350, column1.getPreferredSize().height);
+    column1.setPreferredSize(fixedSize);
+    column2.setPreferredSize(fixedSize);
+    column3.setPreferredSize(fixedSize);
+    column4.setPreferredSize(fixedSize);
+
+    infoPanel.add(column1);
+    infoPanel.add(column2);
+    infoPanel.add(column3);
+    infoPanel.add(column4);
 
     return infoPanel;
   }
 
-
-  private JPanel createLabelInputPanelLeft() {
+  private JPanel createLabelInputPanelColumn1() {
     return createLabelInputPanel(new String[]{
-            "Code", "Quy Cách", "PR",
+            "Code", "Quy Cách", "PR"
+    }, 30);
+  }
+
+  private JPanel createLabelInputPanelColumn2() {
+    return createLabelInputPanel(new String[]{
             "Mã Gai", "KL Max", "KL Min"
     }, 30);
   }
 
-  private JPanel createLabelInputPanelRight() {
+  private JPanel createLabelInputPanelColumn3() {
     return createLabelInputPanel(new String[]{
-            "Chỉ Số Tải", "Tốc Độ", "Vành",
+            "Chỉ Số Tải", "Tốc Độ", "Vành"
+    }, 30);
+  }
+
+  private JPanel createLabelInputPanelColumn4() {
+    return createLabelInputPanel(new String[]{
             "Thương Hiệu", "TT/TL", "KL Chuẩn"
     }, 30);
+  }
+
+  // Custom RoundedBorder class
+  private static class RoundedBorder implements Border {
+    private int radius;
+    private Color color;
+
+    RoundedBorder(int radius, Color color) {
+      this.radius = radius;
+      this.color = color;
+    }
+
+    public Insets getBorderInsets(Component c) {
+      return new Insets(this.radius+1, this.radius+1, this.radius+2, this.radius);
+    }
+
+    public boolean isBorderOpaque() {
+      return true;
+    }
+
+    public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+      Graphics2D g2d = (Graphics2D) g.create();
+      g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+      g2d.setColor(color);
+      g2d.drawRoundRect(x, y, width-1, height-1, radius, radius);
+      g2d.dispose();
+    }
   }
 
   private JPanel createLabelInputPanel(String[] labels, int textFieldSize) {
