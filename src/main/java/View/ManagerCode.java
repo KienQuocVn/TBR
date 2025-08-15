@@ -2,10 +2,8 @@ package View;
 
 import com.toedter.calendar.JDateChooser;
 import javax.swing.border.Border;
-
 import javax.swing.*;
 import java.awt.*;
-import com.toedter.calendar.JDateChooser;
 
 public class ManagerCode extends JPanel {
 
@@ -16,10 +14,10 @@ public class ManagerCode extends JPanel {
     add(createTablePanel(), BorderLayout.SOUTH);
   }
 
-  // Tạo panel phía trên (Hiển thị số, input, nút bấm)
   private JPanel createTopPanel() {
     JPanel topPanel = new JPanel(new BorderLayout());
     topPanel.setPreferredSize(new Dimension(1542, 200));
+    topPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 
     topPanel.add(createLeftTopPanel(), BorderLayout.WEST);
     topPanel.add(createMiddleTopPanel(), BorderLayout.CENTER);
@@ -27,7 +25,6 @@ public class ManagerCode extends JPanel {
 
     return topPanel;
   }
-
   private JPanel createLeftTopPanel() {
     JPanel leftTop = new JPanel();
     leftTop.setLayout(new BoxLayout(leftTop, BoxLayout.Y_AXIS));
@@ -37,14 +34,6 @@ public class ManagerCode extends JPanel {
     Font labelFont = new Font("Arial", Font.BOLD, 16);
     Font inputFont = new Font("Arial", Font.PLAIN, 14);
 
-    // "Chọn chế độ"
-    JLabel chonCheDoLabel = new JLabel("Chọn chế độ");
-    chonCheDoLabel.setFont(labelFont);
-
-
-    JComboBox<String> modeComboBox = new JComboBox<>(new String[]{"AUTO"});
-    modeComboBox.setFont(inputFont);
-    modeComboBox.setMaximumSize(new Dimension(200, 25));
 
     // "Date From"
     JDateChooser dateFrom = new JDateChooser();
@@ -61,8 +50,6 @@ public class ManagerCode extends JPanel {
     ngayLHField.setMaximumSize(new Dimension(200, 40));
 
     // Add to panel
-    leftTop.add(chonCheDoLabel);
-    leftTop.add(modeComboBox);
     leftTop.add(Box.createVerticalStrut(10));
     leftTop.add(dateFrom);
     leftTop.add(Box.createVerticalStrut(10));
@@ -77,49 +64,34 @@ public class ManagerCode extends JPanel {
     return leftTopWrapper;
   }
 
-
   // Tạo panel ở giữa (Hiển thị số và chế độ)
   private JPanel createMiddleTopPanel() {
     JPanel middleTop = new JPanel();
-    middleTop.setPreferredSize(new Dimension(500, 200));
+    middleTop.setPreferredSize(new Dimension(500, 150));
     middleTop.setLayout(new BoxLayout(middleTop, BoxLayout.Y_AXIS));
-    middleTop.setBackground(Color.WHITE);
-
-    // Label chế độ
-    JLabel lblMode = new JLabel("Chế độ: AUTO", SwingConstants.CENTER);
-    lblMode.setFont(new Font("Arial", Font.BOLD, 20));
-    lblMode.setAlignmentX(Component.CENTER_ALIGNMENT);
-    lblMode.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(Color.BLACK, 1),
-            BorderFactory.createEmptyBorder(13, 343, 13, 343)
-    ));
 
     // Label giá trị
     JLabel lblMiddleValue = new JLabel("0.0", SwingConstants.CENTER);
-    lblMiddleValue.setFont(new Font("Arial", Font.BOLD, 120));
+    lblMiddleValue.setFont(new Font("Arial", Font.BOLD, 140));
     lblMiddleValue.setForeground(Color.RED);
     lblMiddleValue.setAlignmentX(Component.CENTER_ALIGNMENT);
     lblMiddleValue.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(Color.BLACK, 1),
-            BorderFactory.createEmptyBorder(0, 328, 0, 328)
+            BorderFactory.createEmptyBorder(10, 500, 10, 500)
     ));
 
     // Add vào panel
-    middleTop.add(lblMode);
     middleTop.add(Box.createVerticalStrut(5));
     middleTop.add(lblMiddleValue);
 
     return middleTop;
   }
 
-
-
-
   private JPanel createRightTopPanel() {
     JPanel rightTop = new JPanel(new BorderLayout());
-    rightTop.setPreferredSize(new Dimension(500, 100));
+    rightTop.setPreferredSize(new Dimension(500, 120));
     rightTop.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createEmptyBorder(30, 20, 30, 0),
+            BorderFactory.createEmptyBorder(0, 20, 0, 0),
             BorderFactory.createLineBorder(Color.GRAY, 3)
     ));
 
@@ -134,13 +106,14 @@ public class ManagerCode extends JPanel {
 
     // Label "Mã Barcode"
     JLabel lblBarcode = new JLabel("Mã Barcode", SwingConstants.CENTER);
-    lblBarcode.setFont(new Font("Arial", Font.BOLD, 16));
+    lblBarcode.setFont(new Font("Arial", Font.BOLD, 18)); // to hơn
     lblBarcode.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-    // Input Barcode
+    // Input Barcode (tăng size)
     JTextField txtBarcode = new JTextField();
-    txtBarcode.setFont(new Font("Arial", Font.PLAIN, 18));
-    txtBarcode.setMaximumSize(new Dimension(300, 30));
+    txtBarcode.setFont(new Font("Arial", Font.PLAIN, 20));
+    txtBarcode.setPreferredSize(new Dimension(350, 40)); // rộng và cao hơn
+    txtBarcode.setMaximumSize(new Dimension(350, 40));
     txtBarcode.setAlignmentX(Component.CENTER_ALIGNMENT);
 
     JPanel subInputPanel = new JPanel();
@@ -151,43 +124,42 @@ public class ManagerCode extends JPanel {
     JTextField txtStartPoint = new JTextField(2);
     JTextField txtEndPoint = new JTextField(2);
 
-    Dimension squareSize = new Dimension(30, 30);
+    Dimension squareSize = new Dimension(35, 35);
     txtStartPoint.setMaximumSize(squareSize);
     txtEndPoint.setMaximumSize(squareSize);
 
     txtStartPoint.setHorizontalAlignment(JTextField.CENTER);
     txtEndPoint.setHorizontalAlignment(JTextField.CENTER);
 
-    // Canh đều hai bên dưới txtBarcode
     subInputPanel.add(Box.createHorizontalStrut(5));
     subInputPanel.add(txtStartPoint);
     subInputPanel.add(Box.createHorizontalGlue());
     subInputPanel.add(txtEndPoint);
     subInputPanel.add(Box.createHorizontalStrut(5));
 
-    // Add components to topContentPanel with reduced struts
     topContentPanel.add(lblBarcode);
-    topContentPanel.add(Box.createVerticalStrut(2));
+    topContentPanel.add(Box.createVerticalStrut(5));
     topContentPanel.add(txtBarcode);
-    topContentPanel.add(Box.createVerticalStrut(2));
+    topContentPanel.add(Box.createVerticalStrut(5));
     topContentPanel.add(subInputPanel);
 
-    // Button Save
+    // Button Save (tăng size)
     JButton btnSave = new JButton("Save");
-    btnSave.setFont(new Font("Arial", Font.BOLD, 16));
+    btnSave.setFont(new Font("Arial", Font.BOLD, 20)); // to hơn
     btnSave.setBackground(new Color(0, 153, 102));
     btnSave.setForeground(Color.YELLOW);
     btnSave.setFocusPainted(false);
     btnSave.setAlignmentX(Component.CENTER_ALIGNMENT);
+    btnSave.setPreferredSize(new Dimension(120, 45)); // nút rộng và cao hơn
+    btnSave.setMaximumSize(new Dimension(120, 45));
 
-    // Add top content and button to centerPanel
     centerPanel.add(topContentPanel, BorderLayout.CENTER);
     centerPanel.add(btnSave, BorderLayout.PAGE_END);
 
     // Panel "NG" bên phải
     JPanel statusPanel = new JPanel(new BorderLayout());
     statusPanel.setBackground(Color.BLACK);
-    statusPanel.setPreferredSize(new Dimension(100, 100));
+    statusPanel.setPreferredSize(new Dimension(110, 110));
     statusPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
 
     JLabel lblStatus = new JLabel("NG", SwingConstants.CENTER);
@@ -202,28 +174,16 @@ public class ManagerCode extends JPanel {
   }
 
 
-
   private JPanel createInfoPanel() {
-    JPanel infoPanel = new JPanel(new GridLayout(1, 4, 10, 0));
-    infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
-
+    JPanel infoPanel = new JPanel(new GridLayout(1, 4, 0, 0));
+    infoPanel.setBorder(BorderFactory.createCompoundBorder(
+            new RoundedBorder(10, Color.GRAY),
+            BorderFactory.createEmptyBorder(20, 20, 20, 20)
+    ));
     JPanel column1 = createLabelInputPanelColumn1();
     JPanel column2 = createLabelInputPanelColumn2();
     JPanel column3 = createLabelInputPanelColumn3();
     JPanel column4 = createLabelInputPanelColumn4();
-
-    // Add rounded border to each column
-    column1.setBorder(new RoundedBorder(10, Color.GRAY));
-    column2.setBorder(new RoundedBorder(10, Color.GRAY));
-    column3.setBorder(new RoundedBorder(10, Color.GRAY));
-    column4.setBorder(new RoundedBorder(10, Color.GRAY));
-
-    // Set same size for all panels
-    Dimension fixedSize = new Dimension(350, column1.getPreferredSize().height);
-    column1.setPreferredSize(fixedSize);
-    column2.setPreferredSize(fixedSize);
-    column3.setPreferredSize(fixedSize);
-    column4.setPreferredSize(fixedSize);
 
     infoPanel.add(column1);
     infoPanel.add(column2);
@@ -313,32 +273,33 @@ public class ManagerCode extends JPanel {
 
   private JPanel createTablePanel() {
     JPanel bottomPanel = new JPanel(new BorderLayout());
-    bottomPanel.setPreferredSize(new Dimension(1542, 350));
+    bottomPanel.setPreferredSize(new Dimension(1542, 640));
+    bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
+    // ===== Thanh chọn ngày và combobox =====
     JPanel contentPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
     contentPanel.setBackground(Color.GRAY);
 
-// Khai báo JDateChooser
+    // Khai báo JDateChooser
     JDateChooser fromDate = new JDateChooser();
     fromDate.setPreferredSize(new Dimension(120, 25));
     JDateChooser toDate = new JDateChooser();
     toDate.setPreferredSize(new Dimension(120, 25));
 
-// Label cho ngày
+    // Label cho ngày
     contentPanel.add(new JLabel("Từ ngày:"));
     contentPanel.add(fromDate);
     contentPanel.add(new JLabel("Đến ngày:"));
     contentPanel.add(toDate);
 
-// ComboBox "Mã mới"
+    // ComboBox "Mã mới"
     contentPanel.add(new JLabel("Mã mới:"));
     String[] maMoiOptions = {"-- Chọn mã --", "CL01", "CL02", "CL03"};
     JComboBox<String> comboMaMoi = new JComboBox<>(maMoiOptions);
     comboMaMoi.setPreferredSize(new Dimension(150, 25));
     contentPanel.add(comboMaMoi);
 
-
-    // ======= BẢNG 1 (bên trái) =======
+    // ======= BẢNG 1 (nằm trên) =======
     String[] leftColumnNames = {
             "STT", "Code lốp", "Quy cách", "KL cân (kg)", "Barcode", "Kết quả"
     };
@@ -349,7 +310,12 @@ public class ManagerCode extends JPanel {
     JTable tableLeft = new JTable(leftData, leftColumnNames);
     JScrollPane scrollLeft = new JScrollPane(tableLeft);
 
-    // ======= BẢNG 2 (bên phải) có cuộn ngang =======
+    // ===== Thanh JPanel nằm giữa hai bảng =====
+    JPanel separatorPanel = new JPanel();
+    separatorPanel.setPreferredSize(new Dimension(0, 30));
+    separatorPanel.setBackground(Color.GRAY);
+
+    // ======= BẢNG 2 (nằm dưới) =======
     String[] rightColumnNames = {
             "Code lốp", "Quy cách", "PR", "Mã gai", "TT_TL", "Chỉ số tải", "Tốc độ",
             "Thương hiệu", "Vành", "TCTK (kg)", "Max (kg)", "Min (kg)", "Thời gian lưu"
@@ -359,22 +325,19 @@ public class ManagerCode extends JPanel {
             {"CL02", "130/70-17", "8", "MG02", "TL", "60", "V", "Michelin", "17", "13.0", "14.0", "12.0", "01/08/2025"}
     };
     JTable tableRight = new JTable(rightData, rightColumnNames);
-    tableRight.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-
     JScrollPane scrollRight = new JScrollPane(tableRight);
-    scrollRight.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-    scrollRight.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-    // Panel chứa hai bảng
-    JPanel tablePanel = new JPanel(new GridLayout(1, 2, 10, 10));
-    tablePanel.add(scrollLeft);
-    tablePanel.add(scrollRight);
+    // Panel chính cho 2 bảng + separator
+    JPanel tablesContainer = new JPanel();
+    tablesContainer.setLayout(new BoxLayout(tablesContainer, BoxLayout.Y_AXIS));
+    tablesContainer.add(scrollLeft);
+    tablesContainer.add(separatorPanel);
+    tablesContainer.add(scrollRight);
 
     // Thêm vào bottomPanel
     bottomPanel.add(contentPanel, BorderLayout.NORTH);
-    bottomPanel.add(tablePanel, BorderLayout.CENTER);
+    bottomPanel.add(tablesContainer, BorderLayout.CENTER);
 
     return bottomPanel;
   }
-
 }
