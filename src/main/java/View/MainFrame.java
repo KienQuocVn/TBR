@@ -9,7 +9,7 @@ public class MainFrame extends JFrame {
 
   public MainFrame() {
     setTitle("Phần Mềm Cân Lớp TBR");
-    setSize(1542, 800);
+    setSize(1920, 1080);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setLocationRelativeTo(null);
     setLayout(new BorderLayout());
@@ -21,17 +21,12 @@ public class MainFrame extends JFrame {
     JMenuItem menuManagerCode = new JMenuItem("Manager Code", loadIcon("images/code.png", 20, 20));
     JMenuItem menuManagerReport = new JMenuItem("Manager Report", loadIcon("images/report.png", 20, 20));
     JMenuItem menuUser = new JMenuItem("User", loadIcon("images/user.png", 20, 20));
-    JMenuItem menuInformation = new JMenuItem("Information", loadIcon("images/info.png", 20, 20));
     JMenuItem menuBackupData = new JMenuItem("Backup Data", loadIcon("images/backup.png", 20, 20));
-    JMenuItem menuExit = new JMenuItem("Exit", loadIcon("images/exit.png", 20, 20));
-
 
     menuBar.add(menuManagerCode);
     menuBar.add(menuManagerReport);
     menuBar.add(menuUser);
     menuBar.add(menuBackupData);
-    menuBar.add(menuInformation);
-    menuBar.add(menuExit);
     setJMenuBar(menuBar);
 
     // Khởi tạo panel chứa nội dung với CardLayout
@@ -54,6 +49,7 @@ public class MainFrame extends JFrame {
 
     setVisible(true);
   }
+
   private ImageIcon loadIcon(String path, int width, int height) {
     java.net.URL location = getClass().getClassLoader().getResource(path);
     if (location == null) {
@@ -64,7 +60,6 @@ public class MainFrame extends JFrame {
     Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
     return new ImageIcon(img);
   }
-
 
   public static void main(String[] args) {
     SwingUtilities.invokeLater(MainFrame::new);
