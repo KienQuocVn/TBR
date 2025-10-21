@@ -28,6 +28,49 @@ public class WeighRecord {
     // Mã barcode
     private String barcode;
 
+
+    @Column(name = "actual_weight", precision = 10, scale = 3)
+    // Khối lượng thực tế
+    private BigDecimal actualWeight;
+
+
+
+    @Column(name = "result", length = 10)
+    // Kết quả cân (OK/NG)
+    private String result;
+
+
+    @Column(name = "specification", length = 50)
+    // Quy cách
+    private String specification;
+
+    @Column(name = "ply_rating")
+    // Chỉ số PR (Ply Rating)
+    private Integer plyRating;
+
+    @Column(name = "tread_code", length = 50)
+    // Mã gai
+    private String treadCode;
+
+    @Column(name = "type", length = 10)
+    // Loại lốp (TT/TL)
+    private String type;
+
+    @Column(name = "load_index", length = 30)
+    // Chỉ số tải
+    private String loadIndex;
+
+    @Column(name = "layer_count")
+    // Số lớp
+    private Integer layerCount;
+
+    @Column(name = "brand", length = 100)
+    // Thương hiệu
+    private String brand;
+
+    @Column(name = "speed_symbol", length = 10)
+    private String speedSymbol;   // Tốc độ (Speed Symbol)
+
     @Column(name = "max_weight", precision = 10, scale = 3)
     // Khối lượng tối đa cho phép
     private BigDecimal maxWeight;
@@ -36,21 +79,17 @@ public class WeighRecord {
     // Khối lượng tối thiểu cho phép
     private BigDecimal minWeight;
 
-    @Column(name = "actual_weight", precision = 10, scale = 3)
-    // Khối lượng thực tế
-    private BigDecimal actualWeight;
+
 
     @Column(name = "deviation", precision = 10, scale = 3)
-    // Sai lệch
+    // khối lượng chuẩn
     private BigDecimal deviation;
-
-    @Column(name = "result", length = 10)
-    // Kết quả cân (OK/NG)
-    private String result;
 
     @Column(name = "weigh_date")
     // Ngày giờ cân
     private LocalDateTime weighDate;
+
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "machine_id")

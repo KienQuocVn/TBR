@@ -3,6 +3,8 @@ package Dao;
 import Model.Machine;
 import Utils.JdbcHelper;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,16 +15,31 @@ public class MachineDAO {
     // Thêm mới một máy cân
     public void insert(Machine entity) {
         String sql = """
-            INSERT INTO machines 
-            (model, location, installation_date) 
-            VALUES (?, ?, ?)
-        """;
-        JdbcHelper.executeUpdate(sql,
-                entity.getModel(),              // Model máy cân
-                entity.getLocation(),           // Vị trí đặt máy
-                entity.getInstallationDate()    // Ngày lắp đặt
-        );
+        INSERT INTO machines (model, location, installation_date)
+        OUTPUT INSERTED.id
+        VALUES (?, ?, ?)
+    """;
+
+        try (Connection con = JdbcHelper.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, entity.getModel());
+            ps.setString(2, entity.getLocation());
+            ps.setDate(3, entity.getInstallationDate() != null
+                    ? java.sql.Date.valueOf(entity.getInstallationDate())
+                    : null);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int generatedId = rs.getInt(1);
+                entity.setId(generatedId); // gán lại id cho object
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Lỗi khi insert Machine: " + e.getMessage());
+        }
     }
+
 
     // Cập nhật thông tin máy cân
     public void update(Machine entity) {

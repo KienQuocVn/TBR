@@ -3,6 +3,9 @@ package Model;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -18,7 +21,7 @@ public class Product {
     // Mã sản phẩm
     private Integer  id;
 
-    @Column(name = "product_code", length = 50, nullable = false)
+    @Column(name = "product_code", length = 50, nullable = false,unique = true)
     // Mã lớp lốp
     private String productCode;
 
@@ -49,6 +52,28 @@ public class Product {
     @Column(name = "brand", length = 100)
     // Thương hiệu
     private String brand;
+
+    @Column(name = "speed_symbol", length = 10)
+    private String speedSymbol;   // Tốc độ (Speed Symbol)
+
+    @Column(name = "max_weight", precision = 10, scale = 3)
+    // Khối lượng tối đa cho phép
+    private BigDecimal maxWeight;
+
+    @Column(name = "min_weight", precision = 10, scale = 3)
+    // Khối lượng tối thiểu cho phép
+    private BigDecimal minWeight;
+
+
+
+    @Column(name = "deviation", precision = 10, scale = 3)
+    // khối lượng chuẩn
+    private BigDecimal deviation;
+
+    @Column(name = "weigh_date")
+    // Ngày giờ cân
+    private LocalDateTime weighDate;
+
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     // Danh sách bản ghi cân liên quan

@@ -58,6 +58,15 @@ public class UserDAO {
         return selectBySql(sql);
     }
 
+    public User login(String username, String password) {
+        String sql = """
+            SELECT *
+            FROM Users 
+            WHERE username = ? AND password_hash = ?
+        """;
+        return selectBySql(sql, username, password).stream().findFirst().orElse(null);
+    }
+
     private List<User> selectBySql(String sql, Object... args) {
         List<User> list = new ArrayList<>();
         try {
